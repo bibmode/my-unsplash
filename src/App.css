@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+.MuiOutlinedInput-root {
+  border-radius: 12px !important;
+}
+
+.MuiMasonry-root {
+  margin: 0 !important;
+  /* width: 110%; */
+}
