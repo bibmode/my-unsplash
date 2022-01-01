@@ -53,8 +53,8 @@ const Image = ({ item }) => {
       onMouseLeave={() => setHover(false)}
     >
       <img
-        src={`${item.picture.asset.url}?w=162&auto=format`}
-        srcSet={`${item.picture.asset.url}?w=162&auto=format&dpr=2 2x`}
+        src={item.picture.asset.url}
+        srcSet={item.picture.asset.url}
         alt={item.label}
         loading="lazy"
         style={{

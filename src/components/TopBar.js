@@ -1,7 +1,8 @@
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { styled } from "@mui/system";
-import React from "react";
+import React, { useContext } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import { AppContext } from "../App";
 
 const Wrapper = styled("div")(({ theme }) => ({
   marginBlock: theme.spacing(4),
@@ -25,6 +26,8 @@ const AddBtn = styled(Button)(({ theme }) => ({
 }));
 
 const TopBar = () => {
+  const { handleClickOpen } = useContext(AppContext);
+
   return (
     <Wrapper>
       <img src="my_unsplash_logo.svg" alt="logo" />
@@ -41,7 +44,7 @@ const TopBar = () => {
         }}
       />
 
-      <AddBtn variant="contained" disableElevation>
+      <AddBtn onClick={handleClickOpen} variant="contained" disableElevation>
         Add a photo
       </AddBtn>
     </Wrapper>
