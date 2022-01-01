@@ -3,8 +3,11 @@ import React, { useEffect, useState } from "react";
 import Masonry from "@mui/lab/Masonry";
 import { client } from "../client";
 import { Stack } from "@mui/material";
+import Image from "./Image";
 
 const Wrapper = styled(Box)(({ theme }) => ({}));
+
+const ImageWrapper = styled(Stack)(({ theme }) => ({}));
 
 const ContentMasonry = () => {
   const [images, setImages] = useState(null);
@@ -33,19 +36,9 @@ const ContentMasonry = () => {
   return (
     <Wrapper>
       {images && (
-        <Masonry columns={3} spacing={3}>
+        <Masonry columns={{ xs: 2, md: 3 }} spacing={3}>
           {images.map((item, index) => (
-            <Stack key={index}>
-              <img
-                src={`${item.picture.asset.url}?w=162&auto=format`}
-                srcSet={`${item.picture.asset.url}?w=162&auto=format&dpr=2 2x`}
-                alt={item.label}
-                loading="lazy"
-                style={{
-                  borderRadius: 24,
-                }}
-              />
-            </Stack>
+            <Image item={item} key={index} />
           ))}
         </Masonry>
       )}
