@@ -1,12 +1,12 @@
-import { Box, styled } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import { Box } from "@mui/system";
+import React, { useEffect, useContext } from "react";
 import Masonry from "@mui/lab/Masonry";
 import { client } from "../client";
-import { Stack } from "@mui/material";
 import Image from "./Image";
+import { AppContext } from "../App";
 
 const ContentMasonry = () => {
-  const [images, setImages] = useState(null);
+  const { images, setImages } = useContext(AppContext);
 
   useEffect(() => {
     client
@@ -19,7 +19,7 @@ const ContentMasonry = () => {
           url
         },
       },
-    }`
+    } | order(_createdAt desc)`
       )
       .then((data) => setImages(data))
       .catch(console.error);

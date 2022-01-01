@@ -3,6 +3,7 @@ import { styled } from "@mui/system";
 import React, { useContext } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { AppContext } from "../App";
+import { client } from "../client";
 
 const Wrapper = styled("div")(({ theme }) => ({
   marginBlock: theme.spacing(4),
@@ -26,7 +27,33 @@ const AddBtn = styled(Button)(({ theme }) => ({
 }));
 
 const TopBar = () => {
-  const { handleClickOpen } = useContext(AppContext);
+  const { handleClickOpen, setImages, setLoader } = useContext(AppContext);
+
+  const handleSearch = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      setLoader(true);
+
+      console.log(e.target.value);
+      client
+        .fetch(
+          `*[_type == "picture" && (label match "${e.target.value}")]{
+      label,
+      picture{
+        asset->{
+          _id,
+          url
+        },
+      },
+    } | order(_createdAt desc)`
+        )
+        .then((data) => {
+          setImages(data);
+          setLoader(false);
+        })
+        .catch(console.error);
+    }
+  };
 
   return (
     <Wrapper>
@@ -42,6 +69,7 @@ const TopBar = () => {
             </InputAdornment>
           ),
         }}
+        onKeyPress={handleSearch}
       />
 
       <AddBtn onClick={handleClickOpen} variant="contained" disableElevation>
