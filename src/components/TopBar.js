@@ -10,10 +10,24 @@ const Wrapper = styled("div")(({ theme }) => ({
   marginInline: 12,
   display: "flex",
   alignItems: "center",
+  flexWrap: "wrap",
+}));
+
+const Logo = styled("div")(({ theme }) => ({
+  [theme.breakpoints.down("sm")]: {
+    flex: "0 0 100%",
+    marginBottom: theme.spacing(2),
+    display: "flex",
+    alignItems: "left",
+  },
 }));
 
 const SearchBar = styled(TextField)(({ theme }) => ({
   marginRight: "auto",
+  [theme.breakpoints.down("sm")]: {
+    marginBottom: theme.spacing(2),
+    width: "100%",
+  },
 }));
 
 const AddBtn = styled(Button)(({ theme }) => ({
@@ -24,6 +38,9 @@ const AddBtn = styled(Button)(({ theme }) => ({
   borderRadius: 12,
   alignSelf: "stretch",
   paddingInline: theme.spacing(3),
+  [theme.breakpoints.down("md")]: {
+    marginLeft: "auto",
+  },
 }));
 
 const TopBar = () => {
@@ -57,7 +74,9 @@ const TopBar = () => {
 
   return (
     <Wrapper>
-      <img src="my_unsplash_logo.svg" alt="logo" />
+      <Logo>
+        <img src="my_unsplash_logo.svg" alt="logo" />
+      </Logo>
 
       <SearchBar
         variant="outlined"

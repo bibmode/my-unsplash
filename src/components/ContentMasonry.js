@@ -32,7 +32,7 @@ const ContentMasonry = () => {
   return (
     <Box>
       {images && (
-        <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={3}>
+        <Masonry columns={{ xs: 1, sm: 2, md: 3, xl: 4 }} spacing={3}>
           {images.map((item, index) => (
             <Image item={item} key={index} />
           ))}
