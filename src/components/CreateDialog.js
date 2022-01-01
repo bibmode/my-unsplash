@@ -15,7 +15,7 @@ const Content = styled(DialogContent)(({ theme }) => ({
   paddingTop: `${theme.spacing(1)} !important`,
   display: "flex",
   flexDirection: "column",
-  width: 500,
+  width: 400,
   [theme.breakpoints.down("sm")]: {
     width: "100%",
   },
@@ -97,7 +97,7 @@ const CreateDialog = () => {
           url
         },
       },
-    }`
+    } | order(_createdAt desc)`
         )
         .then((data) => {
           setImages(data);

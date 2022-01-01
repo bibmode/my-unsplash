@@ -1,5 +1,6 @@
 import { Button, Stack, styled, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { AppContext } from "../App";
 
 const Wrapper = styled(Stack)(({ theme }) => ({
   position: "relative",
@@ -41,11 +42,17 @@ const Label = styled(Typography)(({ theme }) => ({
 }));
 
 const Image = ({ item }) => {
+  const { setOpenDelete, setDeleteItem } = useContext(AppContext);
   const [hover, setHover] = useState(false);
 
   useEffect(() => {
     if (hover) console.log("entered");
   }, [hover]);
+
+  const handleClick = (e) => {
+    console.log(item);
+    setDeleteItem(item.label);
+  };
 
   return (
     <Wrapper
@@ -63,7 +70,14 @@ const Image = ({ item }) => {
       />
       {hover && (
         <ImageTools>
-          <DeleteBtn variant="outlined" color="error">
+          <DeleteBtn
+            onClick={(e) => {
+              setOpenDelete(true);
+              handleClick(e);
+            }}
+            variant="outlined"
+            color="error"
+          >
             delete
           </DeleteBtn>
           <Label variant="h6">{item.label}</Label>

@@ -6,6 +6,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { green } from "@mui/material/colors";
 import { createContext, useState } from "react";
 import CreateDialog from "./components/CreateDialog";
+import DeleteDialog from "./components/DeleteDialog";
 
 const appTheme = createTheme({
   palette: {
@@ -28,8 +29,10 @@ export const AppContext = createContext(null);
 
 function App() {
   const [open, setOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [images, setImages] = useState(null);
   const [loader, setLoader] = useState(false);
+  const [deleteItem, setDeleteItem] = useState(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -37,6 +40,7 @@ function App() {
 
   const handleClose = () => {
     setOpen(false);
+    setOpenDelete(false);
   };
 
   return (
@@ -51,6 +55,10 @@ function App() {
           setImages,
           loader,
           setLoader,
+          openDelete,
+          setOpenDelete,
+          deleteItem,
+          setDeleteItem,
         }}
       >
         <div className="App">
@@ -60,6 +68,7 @@ function App() {
             <ContentMasonry />
           </Container>
           <CreateDialog />
+          <DeleteDialog />
         </div>
       </AppContext.Provider>
     </ThemeProvider>
