@@ -15,7 +15,7 @@ const SearchBar = styled(TextField)(({ theme }) => ({
 }));
 
 const AddBtn = styled(Button)(({ theme }) => ({
-  backgroundColor: "#3DB46D",
+  color: "#fff",
   textTransform: "none",
   fontWeight: 700,
   fontSize: 14,

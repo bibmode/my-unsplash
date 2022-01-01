@@ -5,10 +5,6 @@ import { client } from "../client";
 import { Stack } from "@mui/material";
 import Image from "./Image";
 
-const Wrapper = styled(Box)(({ theme }) => ({}));
-
-const ImageWrapper = styled(Stack)(({ theme }) => ({}));
-
 const ContentMasonry = () => {
   const [images, setImages] = useState(null);
 
@@ -34,7 +30,7 @@ const ContentMasonry = () => {
   }, [images]);
 
   return (
-    <Wrapper>
+    <Box>
       {images && (
         <Masonry columns={{ xs: 2, md: 3 }} spacing={3}>
           {images.map((item, index) => (
@@ -42,7 +38,7 @@ const ContentMasonry = () => {
           ))}
         </Masonry>
       )}
-    </Wrapper>
+    </Box>
   );
 };
 
