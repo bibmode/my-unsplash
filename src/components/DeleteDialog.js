@@ -105,7 +105,9 @@ const DeleteDialog = () => {
     },
     validationSchema: validationSchema,
     onSubmit: (values, actions) => {
-      values.password === "genevieve" ? deletePhoto() : wrongPassword();
+      values.password === process.env.REACT_APP_IMAGE_DELETION_KEY
+        ? deletePhoto()
+        : wrongPassword();
 
       actions.resetForm({
         values: {

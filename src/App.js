@@ -56,15 +56,10 @@ function App() {
 
   useEffect(() => {
     setTimeout(() => {
+      setPasswordError(false);
       setAddError(false);
     }, 3000);
-  }, [addError]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setPasswordError(false);
-    }, 3000);
-  }, [passwordError]);
+  }, [passwordError, addError]);
 
   return (
     <ThemeProvider theme={appTheme}>
