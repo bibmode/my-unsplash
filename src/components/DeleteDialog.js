@@ -106,16 +106,20 @@ const DeleteDialog = () => {
 
       actions.resetForm({
         values: {
-          // the type of `values` inferred to be Blog
           password: "",
         },
-        // you can also set the other form states here
       });
     },
   });
 
   return (
-    <Dialog open={openDelete} onClose={handleClose}>
+    <Dialog
+      open={openDelete}
+      onClose={() => {
+        handleClose();
+        formik.resetForm();
+      }}
+    >
       <DialogTitle>Are you sure?</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <Content>
@@ -137,7 +141,10 @@ const DeleteDialog = () => {
           <Button
             sx={{ textTransform: "none", color: "#BDBDBD" }}
             color="inherit"
-            onClick={handleClose}
+            onClick={() => {
+              handleClose();
+              formik.resetForm();
+            }}
           >
             Cancel
           </Button>

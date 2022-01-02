@@ -122,7 +122,13 @@ const CreateDialog = () => {
   });
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog
+      open={open}
+      onClose={() => {
+        handleClose();
+        formik.resetForm();
+      }}
+    >
       <DialogTitle>Add a new photo</DialogTitle>
       <form onSubmit={formik.handleSubmit}>
         <Content>
@@ -154,7 +160,11 @@ const CreateDialog = () => {
           <Button
             sx={{ textTransform: "none", color: "#BDBDBD" }}
             color="inherit"
-            onClick={handleClose}
+            type="reset"
+            onClick={() => {
+              handleClose();
+              formik.resetForm();
+            }}
           >
             Cancel
           </Button>
