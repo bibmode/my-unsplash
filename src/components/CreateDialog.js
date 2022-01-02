@@ -24,10 +24,7 @@ const Content = styled(DialogContent)(({ theme }) => ({
   paddingTop: `${theme.spacing(1)} !important`,
   display: "flex",
   flexDirection: "column",
-  width: 400,
-  [theme.breakpoints.down("sm")]: {
-    width: "100%",
-  },
+  width: "100%",
 }));
 
 const Actions = styled(DialogActions)(({ theme }) => ({
@@ -124,6 +121,8 @@ const CreateDialog = () => {
   return (
     <Dialog
       open={open}
+      fullWidth
+      maxWidth="sm"
       onClose={() => {
         handleClose();
         formik.resetForm();

@@ -113,9 +113,9 @@ function App() {
           <Container maxWidth="xl">
             <TopBar />
             <ContentMasonry />
+            <CreateDialog />
+            <DeleteDialog />
           </Container>
-          <CreateDialog />
-          <DeleteDialog />
         </div>
       </AppContext.Provider>
     </ThemeProvider>
