@@ -41,8 +41,14 @@ const SubmitBtn = styled(Button)(({ theme }) => ({
 }));
 
 const CreateDialog = () => {
-  const { open, handleClose, setImages, setLoader, setAddError } =
-    useContext(AppContext);
+  const {
+    open,
+    handleClose,
+    setImages,
+    setLoader,
+    setAddError,
+    setContentLength,
+  } = useContext(AppContext);
 
   const addPhoto = (url, label) => {
     setLoader(true);
@@ -95,6 +101,7 @@ const CreateDialog = () => {
         )
         .then((data) => {
           setImages(data);
+          setContentLength(data.length);
           setLoader(false);
         })
         .catch((err) => {

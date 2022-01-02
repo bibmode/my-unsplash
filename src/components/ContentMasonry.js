@@ -1,30 +1,12 @@
 import { Box } from "@mui/system";
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import Masonry from "@mui/lab/Masonry";
-import { client } from "../client";
 import Image from "./Image";
 import { AppContext } from "../App";
 import { Typography } from "@mui/material";
 
 const ContentMasonry = () => {
-  const { images, setImages } = useContext(AppContext);
-
-  useEffect(() => {
-    client
-      .fetch(
-        `*[_type == "picture"]{
-      label,
-      picture{
-        asset->{
-          _id,
-          url
-        },
-      },
-    } | order(_createdAt desc)`
-      )
-      .then((data) => setImages(data))
-      .catch(console.error);
-  }, []);
+  const { images } = useContext(AppContext);
 
   return (
     <Box>

@@ -47,6 +47,7 @@ const DeleteDialog = () => {
     setImages,
     setLoader,
     setPasswordError,
+    setContentLength,
   } = useContext(AppContext);
 
   const deletePhoto = () => {
@@ -84,6 +85,7 @@ const DeleteDialog = () => {
       )
       .then((data) => {
         setImages(data);
+        setContentLength(data.length);
         setLoader(false);
       })
       .catch((err) => {

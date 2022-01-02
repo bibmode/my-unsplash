@@ -7,6 +7,7 @@ import { green } from "@mui/material/colors";
 import { createContext, useState, useEffect } from "react";
 import CreateDialog from "./components/CreateDialog";
 import DeleteDialog from "./components/DeleteDialog";
+import { client } from "./client";
 
 const appTheme = createTheme({
   palette: {
@@ -38,6 +39,7 @@ function App() {
   const [deleteItem, setDeleteItem] = useState(null);
   const [addError, setAddError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [contentLength, setContentLength] = useState(null);
 
   const [label, setLabel] = useState("");
   const [url, setUrl] = useState("");
@@ -61,6 +63,26 @@ function App() {
     }, 3000);
   }, [passwordError, addError]);
 
+  useEffect(() => {
+    client
+      .fetch(
+        `*[_type == "picture"]{
+      label,
+      picture{
+        asset->{
+          _id,
+          url
+        },
+      },
+    } | order(_createdAt desc)`
+      )
+      .then((data) => {
+        setImages(data);
+        setContentLength(data.length);
+      })
+      .catch(console.error);
+  }, []);
+
   return (
     <ThemeProvider theme={appTheme}>
       <AppContext.Provider
@@ -83,6 +105,8 @@ function App() {
           setUrl,
           setAddError,
           setPasswordError,
+          contentLength,
+          setContentLength,
         }}
       >
         <div className="App">

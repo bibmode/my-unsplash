@@ -1,6 +1,6 @@
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { styled } from "@mui/system";
-import React, { useContext } from "react";
+import React, { useContext, useRef, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { AppContext } from "../App";
 import { client } from "../client";
@@ -13,7 +13,11 @@ const Wrapper = styled("div")(({ theme }) => ({
   flexWrap: "wrap",
 }));
 
-const Logo = styled("div")(({ theme }) => ({
+const Logo = styled("button")(({ theme }) => ({
+  backgroundColor: "transparent",
+  outline: "none",
+  border: "none",
+  cursor: "pointer",
   [theme.breakpoints.down("sm")]: {
     flex: "0 0 100%",
     marginBottom: theme.spacing(2),
@@ -44,7 +48,10 @@ const AddBtn = styled(Button)(({ theme }) => ({
 }));
 
 const TopBar = () => {
-  const { handleClickOpen, setImages, setLoader } = useContext(AppContext);
+  const { handleClickOpen, setImages, setLoader, contentLength, images } =
+    useContext(AppContext);
+
+  const [inputValue, setInputValue] = useState("");
 
   const handleSearch = (e) => {
     if (e.key === "Enter") {
@@ -71,13 +78,41 @@ const TopBar = () => {
     }
   };
 
+  const getAllImages = () => {
+    setInputValue("");
+
+    if (contentLength !== images.length) {
+      setLoader(true);
+
+      client
+        .fetch(
+          `*[_type == "picture"]{
+      label,
+      picture{
+        asset->{
+          _id,
+          url
+        },
+      },
+    } | order(_createdAt desc)`
+        )
+        .then((data) => {
+          setImages(data);
+          setLoader(false);
+        })
+        .catch(console.error);
+    }
+  };
+
   return (
     <Wrapper>
-      <Logo>
+      <Logo onClick={getAllImages}>
         <img src="my_unsplash_logo.svg" alt="logo" />
       </Logo>
 
       <SearchBar
+        value={inputValue}
+        onChange={(e) => setInputValue(e.target.value)}
         variant="outlined"
         label="Search"
         InputProps={{
