@@ -8,6 +8,7 @@ import { createContext, useState, useEffect } from "react";
 import CreateDialog from "./components/CreateDialog";
 import DeleteDialog from "./components/DeleteDialog";
 import { client } from "./client";
+import { allImagesQuery } from "./utils/data";
 
 const appTheme = createTheme({
   palette: {
@@ -64,18 +65,10 @@ function App() {
   }, [passwordError, addError]);
 
   useEffect(() => {
+    const query = allImagesQuery();
+
     client
-      .fetch(
-        `*[_type == "picture"]{
-      label,
-      picture{
-        asset->{
-          _id,
-          url
-        },
-      },
-    } | order(_createdAt desc)`
-      )
+      .fetch(query)
       .then((data) => {
         setImages(data);
         setContentLength(data.length);

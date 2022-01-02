@@ -12,6 +12,7 @@ import { AppContext } from "../App";
 import { client } from "../client";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { allImagesQuery } from "../utils/data";
 
 const Content = styled(DialogContent)(({ theme }) => ({
   paddingTop: `${theme.spacing(1)} !important`,
@@ -71,18 +72,10 @@ const DeleteDialog = () => {
   };
 
   const assetUpdate = () => {
+    const query = allImagesQuery();
+
     client
-      .fetch(
-        `*[_type == "picture"]{
-      label,
-      picture{
-        asset->{
-          _id,
-          url
-        },
-      },
-    } | order(_createdAt desc)`
-      )
+      .fetch(query)
       .then((data) => {
         setImages(data);
         setContentLength(data.length);

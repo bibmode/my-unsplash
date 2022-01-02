@@ -12,6 +12,7 @@ import { AppContext } from "../App";
 import { client } from "../client";
 import * as yup from "yup";
 import { useFormik } from "formik";
+import { allImagesQuery } from "../utils/data";
 
 // form validation
 const validationSchema = yup.object({
@@ -87,18 +88,10 @@ const CreateDialog = () => {
     };
 
     client.create(doc).then(() => {
+      const query = allImagesQuery();
+
       client
-        .fetch(
-          `*[_type == "picture"]{
-      label,
-      picture{
-        asset->{
-          _id,
-          url
-        },
-      },
-    } | order(_createdAt desc)`
-        )
+        .fetch(query)
         .then((data) => {
           setImages(data);
           setContentLength(data.length);

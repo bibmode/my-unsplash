@@ -1,9 +1,10 @@
 import { Button, InputAdornment, TextField } from "@mui/material";
 import { styled } from "@mui/system";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import { AppContext } from "../App";
 import { client } from "../client";
+import { allImagesQuery, searchQuery } from "../utils/data";
 
 const Wrapper = styled("div")(({ theme }) => ({
   marginBlock: theme.spacing(4),
@@ -58,18 +59,10 @@ const TopBar = () => {
       e.preventDefault();
       setLoader(true);
 
+      const query = searchQuery(e.target.value);
+
       client
-        .fetch(
-          `*[_type == "picture" && (label match "${e.target.value}")]{
-      label,
-      picture{
-        asset->{
-          _id,
-          url
-        },
-      },
-    } | order(_createdAt desc)`
-        )
+        .fetch(query)
         .then((data) => {
           setImages(data);
           setLoader(false);
@@ -83,19 +76,10 @@ const TopBar = () => {
 
     if (contentLength !== images.length) {
       setLoader(true);
+      const query = allImagesQuery();
 
       client
-        .fetch(
-          `*[_type == "picture"]{
-      label,
-      picture{
-        asset->{
-          _id,
-          url
-        },
-      },
-    } | order(_createdAt desc)`
-        )
+        .fetch(query)
         .then((data) => {
           setImages(data);
           setLoader(false);
