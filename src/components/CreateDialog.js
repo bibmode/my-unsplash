@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
   Button,
   Dialog,
@@ -10,6 +10,14 @@ import {
 } from "@mui/material";
 import { AppContext } from "../App";
 import { client } from "../client";
+import * as yup from "yup";
+import { useFormik } from "formik";
+
+// form validation
+const validationSchema = yup.object({
+  url: yup.string("Enter Photo URL").required("URL is required"),
+  label: yup.string("Enter Label").required("Label is required"),
+});
 
 const Content = styled(DialogContent)(({ theme }) => ({
   paddingTop: `${theme.spacing(1)} !important`,
@@ -33,44 +41,33 @@ const SubmitBtn = styled(Button)(({ theme }) => ({
 }));
 
 const CreateDialog = () => {
-  const { open, handleClose, setImages, setLoader } = useContext(AppContext);
-  const [label, setLabel] = useState("");
-  const [url, setUrl] = useState("");
-  const [imageAsset, setImageAsset] = useState(null);
+  const { open, handleClose, setImages, setLoader, setAddError } =
+    useContext(AppContext);
 
-  const addPhoto = () => {
-    console.log(url);
-    console.log(label);
+  const addPhoto = (url, label) => {
     setLoader(true);
 
     fetch(url)
       .then((res) => res.blob())
       .then((blob) => {
-        // setImageAsset(blob);
         client.assets
           .upload("image", blob, {
             contentType: blob.type,
             filename: blob.size,
           })
           .then((document) => {
-            console.log(document);
-            assetUpdate(document);
+            assetUpdate(document, label);
           })
-          .catch((error) => console.log(error));
+          .catch((error) => {
+            setLoader(false);
+            setAddError(true);
+          });
       });
 
     handleClose();
   };
 
-  const handleUrl = (e) => {
-    setUrl(e.target.value);
-  };
-
-  const handleLabel = (e) => {
-    setLabel(e.target.value);
-  };
-
-  const assetUpdate = (image) => {
+  const assetUpdate = (image, label) => {
     const doc = {
       _type: "picture",
       label: label,
@@ -83,10 +80,7 @@ const CreateDialog = () => {
       },
     };
 
-    client.create(doc).then((res) => {
-      console.log(res);
-      // window.location.reload();
-
+    client.create(doc).then(() => {
       client
         .fetch(
           `*[_type == "picture"]{
@@ -103,40 +97,77 @@ const CreateDialog = () => {
           setImages(data);
           setLoader(false);
         })
-        .catch(console.error);
+        .catch((err) => {
+          setLoader(false);
+        });
     });
   };
+
+  const formik = useFormik({
+    initialValues: {
+      label: "",
+      url: "",
+    },
+    validationSchema: validationSchema,
+    onSubmit: (values, actions) => {
+      addPhoto(values.url, values.label);
+
+      actions.resetForm({
+        values: {
+          label: "",
+          url: "",
+        },
+      });
+    },
+  });
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add a new photo</DialogTitle>
-      <Content>
-        <TextField
-          id="label-field"
-          label="Label"
-          // defaultValue="Hello World"
-          value={label}
-          onChange={handleLabel}
-          variant="outlined"
-        />
-        <TextField
-          id="url-field"
-          label="Photo URL"
-          // defaultValue="https://images.unsplash.com/photo-1584395630827-860eee694d7b?ixlib=r..."
-          value={url}
-          onChange={handleUrl}
-          variant="outlined"
-          sx={{ mt: 5 }}
-        />
-      </Content>
-      <Actions>
-        <Button sx={{ textTransform: "none" }} onClick={handleClose}>
-          Cancel
-        </Button>
-        <SubmitBtn onClick={addPhoto} variant="contained" disableElevation>
-          Submit
-        </SubmitBtn>
-      </Actions>
+      <form onSubmit={formik.handleSubmit}>
+        <Content>
+          <TextField
+            id="label"
+            name="label"
+            label="Label"
+            value={formik.values.label}
+            onChange={formik.handleChange}
+            error={formik.touched.label && Boolean(formik.errors.label)}
+            helperText={formik.touched.label && formik.errors.label}
+            // onChange={handleLabel}
+            variant="outlined"
+          />
+          <TextField
+            // defaultValue="https://images.unsplash.com/photo-1584395630827-860eee694d7b?ixlib=r..."
+            variant="outlined"
+            sx={{ mt: 5 }}
+            id="url"
+            name="url"
+            label="Photo URL"
+            value={formik.values.url}
+            onChange={formik.handleChange}
+            error={formik.touched.url && Boolean(formik.errors.url)}
+            helperText={formik.touched.url && formik.errors.url}
+          />
+        </Content>
+        <Actions>
+          <Button
+            sx={{ textTransform: "none", color: "#BDBDBD" }}
+            color="inherit"
+            onClick={handleClose}
+          >
+            Cancel
+          </Button>
+          <SubmitBtn
+            type="submit"
+            // onClick={addPhoto}
+            variant="contained"
+            disableElevation
+          >
+            Submit
+          </SubmitBtn>
+        </Actions>
+      </form>
     </Dialog>
   );
 };

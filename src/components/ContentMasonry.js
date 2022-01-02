@@ -4,6 +4,7 @@ import Masonry from "@mui/lab/Masonry";
 import { client } from "../client";
 import Image from "./Image";
 import { AppContext } from "../App";
+import { Typography } from "@mui/material";
 
 const ContentMasonry = () => {
   const { images, setImages } = useContext(AppContext);
@@ -25,18 +26,18 @@ const ContentMasonry = () => {
       .catch(console.error);
   }, []);
 
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
-
   return (
     <Box>
-      {images && (
+      {images?.length ? (
         <Masonry columns={{ xs: 1, sm: 2, md: 3, xl: 4 }} spacing={3}>
           {images.map((item, index) => (
             <Image item={item} key={index} />
           ))}
         </Masonry>
+      ) : (
+        <Typography sx={{ mt: 10 }} variant="subtitle1">
+          No results found
+        </Typography>
       )}
     </Box>
   );

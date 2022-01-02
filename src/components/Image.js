@@ -1,5 +1,5 @@
 import { Button, Stack, styled, Typography } from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "../App";
 
 const Wrapper = styled(Stack)(({ theme }) => ({
@@ -45,12 +45,7 @@ const Image = ({ item }) => {
   const { setOpenDelete, setDeleteItem } = useContext(AppContext);
   const [hover, setHover] = useState(false);
 
-  useEffect(() => {
-    if (hover) console.log("entered");
-  }, [hover]);
-
-  const handleClick = (e) => {
-    console.log(item);
+  const handleClick = () => {
     setDeleteItem(item.label);
   };
 

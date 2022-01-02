@@ -51,7 +51,6 @@ const TopBar = () => {
       e.preventDefault();
       setLoader(true);
 
-      console.log(e.target.value);
       client
         .fetch(
           `*[_type == "picture" && (label match "${e.target.value}")]{
