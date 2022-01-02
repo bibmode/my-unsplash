@@ -21,7 +21,6 @@ const Logo = styled("button")(({ theme }) => ({
   cursor: "pointer",
   [theme.breakpoints.down("sm")]: {
     flex: "0 0 100%",
-    marginBottom: theme.spacing(2),
     display: "flex",
     alignItems: "left",
   },
@@ -29,8 +28,8 @@ const Logo = styled("button")(({ theme }) => ({
 
 const SearchBar = styled(TextField)(({ theme }) => ({
   marginRight: "auto",
-  [theme.breakpoints.down("sm")]: {
-    marginBottom: theme.spacing(2),
+  "@media (max-width: 611px)": {
+    marginBlock: theme.spacing(2),
     width: "100%",
   },
 }));
